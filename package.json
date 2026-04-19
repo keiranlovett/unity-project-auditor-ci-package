@@ -1,0 +1,27 @@
+{
+  "name": "com.kvcl.project-auditor-ci",
+  "displayName": "Project Auditor CI Tool",
+  "version": "1.0.0",
+  "description": "A small experimental Unity Editor package for running Unity Project Auditor in CI with GitHub Actions.",
+  "documentationUrl": "https://github.com/keiranlovett/unity-project-auditor-ci-package",
+  "homepage": "https://github.com/keiranlovett/unity-project-auditor-ci-package",
+  "bugs": {
+    "url": "hhttps://github.com/keiranlovett/unity-project-auditor-ci-package/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/keiranlovett/unity-project-auditor-ci-package.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Keiran Lovett",
+    "url": "https://keiran.me"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "unity": "2021.3",
+  "dependencies": {
+    "com.unity.project-auditor": "1.0.2"
+  }
+}
