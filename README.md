@@ -15,6 +15,7 @@ Once the audit completes, extensions generate:
 - The Markdown summary includes the top 10 `Critical` and `Major` issues after filtering.
 - The native `.projectauditor` file is still saved in full.
 
+
 ## Workflow example
 
 See:
@@ -50,6 +51,7 @@ Or manually
 }
 ```
 
+
 ## Usage
 
 Use this method in CI:
@@ -57,6 +59,30 @@ Use this method in CI:
 ```text
 ProjectAuditorCI.AuditAndExport
 ```
+
+### Working with GitHub Actions
+
+The included sample workflow runs the audit in CI, publishes a Markdown summary to the GitHub Actions job summary, uploads SARIF for GitHub code scanning, and uploads the raw `.projectauditor` report as an artifact. 
+
+A sample workflow is included at:
+
+```text
+Samples/unity-project-auditor.yml
+```
+
+In your project this file should be renamed and moved to the workflows folder:
+
+```text
+.github/workflows/project-auditor.yml
+```
+
+Then configure the required Unity secrets in your GitHub repository:
+-	`UNITY_LICENSE`
+-	`UNITY_EMAIL`
+-	`UNITY_PASSWORD`
+
+You can copy and use as is, or modify it to better suit your project.
+
 
 ### Environment variables
 
@@ -94,6 +120,7 @@ Example:
 ```text
 PROJECT_AUDITOR_EXCLUDE_PATH_PREFIXES=Packages/com.unity.,Library/PackageCache/
 ```
+
 
 ## TODO:
 - Improved Extensions Support

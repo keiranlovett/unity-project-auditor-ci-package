@@ -1,0 +1,61 @@
+name: Unity Project Auditor
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ runner.os }}-${{ hashFiles('Packages/manifest.json', 'Packages/packages-lock.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-${{ runner.os }}-
+
+      - name: Run Project Auditor
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          PROJECT_AUDITOR_REPORT: "${{ github.workspace }}/ProjectAuditor/report.projectauditor"
+          PROJECT_AUDITOR_SARIF: "${{ github.workspace }}/ProjectAuditor/results.sarif"
+          PROJECT_AUDITOR_SUMMARY: "${{ github.workspace }}/ProjectAuditor/summary.md"
+          PROJECT_AUDITOR_ASSEMBLIES: "MyGame.Core,MyGame.Runtime"
+          PROJECT_AUDITOR_EXCLUDE_PATH_PREFIXES: "Packages/com.unity.,Library/PackageCache/"
+          PROJECT_AUDITOR_FAIL_THRESHOLD: "1"
+        with:
+          targetPlatform: StandaloneLinux64
+          buildMethod: ProjectAuditorCI.AuditAndExport
+          customParameters: -quit -batchmode -nographics
+
+      - name: Publish summary
+        run: |
+          cat ProjectAuditor/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ProjectAuditor/results.sarif
+          category: unity-project-auditor
+
+      - name: Upload raw report
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-auditor-report
+          path: ProjectAuditor/report.projectauditor
