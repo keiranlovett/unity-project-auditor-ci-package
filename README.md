@@ -16,14 +16,6 @@ Once the audit completes, extensions generate:
 - The native `.projectauditor` file is still saved in full.
 
 
-## Workflow example
-
-See:
-
-```text
-.github/workflows/project-auditor.yml
-```
-
 ## Install via UPM
 
 This package can be installed directly from a GitHub repository using Unity Package Manager.
